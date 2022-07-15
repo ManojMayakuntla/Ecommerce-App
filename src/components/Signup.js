@@ -3,6 +3,9 @@ import { useState } from 'react';
 import {object,string,number} from 'yup';
 import '../App.css';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const userSchema=object({
     email:string().email().required('required'),
@@ -14,6 +17,7 @@ const userSchema=object({
 })
 
 const Signup=()=>{
+    const navigate = useNavigate();
     const params=useParams();
     const [details,setDetails] = useState({
         email:'',
@@ -22,10 +26,12 @@ const Signup=()=>{
         confirmPassword:''
     });
     const [errors,setErrors]=useState({});
+    const [loading,setLoading] = useState(false);
     const handleOnChange=(key,value)=>{
         setDetails({...details,[key]:value})
     }
     const handleSumbit =()=>{
+       setLoading(true);
        userSchema.validate(details,{abortEarly:false}).then((res)=>{
         setErrors({});
         console.log(res);
@@ -40,7 +46,11 @@ const Signup=()=>{
         }).then((res)=>{
             if(res.status == 200)
             {
-                console.log(res)}
+                setLoading(false);
+                console.log(res);
+                toast.success('Signed up successfully');
+                navigate('/login');
+            }
             }).catch((err)=>{console.log(err)})
        })
        .catch((err)=>{
@@ -50,6 +60,7 @@ const Signup=()=>{
         })
         setErrors(Obj);
     })
+    
     }
     return(
         <div className='d-flex justify-content-center align-items-center'style={{}}>
@@ -69,9 +80,18 @@ const Signup=()=>{
                 <div><input type="password" className='form-control' placeholder="Confirm password" style={{width:'90%',marginLeft:15,marginTop:10}} onChange={(event)=>{handleOnChange('confirmPassword',event.target.value)}}/>
                 <p className='text-danger'>{errors['confirmPassword']}</p>
                 </div>
+                {
+                loading?
+                <>
+                  <div class="d-flex justify-content-center align-items-center">
+                        <div className="spinner-border text-primary" role="status"></div>
+                        <div style={{marginLeft:20,marginTop:10}} className='text-primary'><p>credentials verification</p></div>
+                 </div>
+                </>:null
+                }
                 <div><button type="submit" className="btn btn-primary" style={{width:'90%',marginTop:10}} onClick={handleSumbit}>Signup</button></div>
                 <br/>
-                <p className='text-secondary'>Already registered? <a href='/login'>login</a> here</p>
+                <p className='text-secondary'>Already registered? <Link to='/login'>login</Link> here</p>
                 <br/>
             </div>
         </div>

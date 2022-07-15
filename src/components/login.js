@@ -2,7 +2,7 @@ import { useState } from "react";
 import '../App.css';
 import { object,string } from "yup";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { toast } from "react-toastify";
 const userSchema = object({
     email:string().email().required(),
@@ -31,13 +31,17 @@ const Login=()=>{
                     password: details['password']
                      }
             }).then((res)=>{
-                setLoading(false)
                 if(res.status==200){
-                toast.success('logged in successfully!')
-                const token = res.data['user-token'];
-                localStorage.setItem('EcomToken',token);
-                navigate('/productfeed');
-            }}).catch((err)=>{
+                    console.log(res);
+                    localStorage.setItem('email',res.data.email);
+                    localStorage.setItem('name',res.data.name);
+                    setLoading(false);
+                    toast.success('logged in successfully!');
+                    const token = res.data['user-token'];
+                    localStorage.setItem('EcomToken',token);
+                    navigate('/productfeed');
+                }
+             }).catch((err)=>{
                 setLoading(false)
                 console.log(err);
                 toast.error(err.response.data.message)
@@ -73,7 +77,7 @@ const Login=()=>{
             }
             <div><button type="submit" className="btn btn-primary" style={{width:'90%',marginTop:10}} onClick={handleSubmit}>Login</button></div>
             <br/>
-            <p className='text-secondary'>Not registered? <a href='/signup'>Signup</a> here</p>
+            <p className='text-secondary'>Not registered? <Link to='/signup'>Signup</Link> here</p>
             <br/>
         </div>
            

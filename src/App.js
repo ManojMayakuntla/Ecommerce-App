@@ -31,6 +31,7 @@ function App() {
       <ToastContainer />
       <BrowserRouter>
       <Routes>
+        <Route path='/*' element={<Signup/>}/>
         <Route path='/signup' element={
           <UnprotectedRoute>
             <Signup/>

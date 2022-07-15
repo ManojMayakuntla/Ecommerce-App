@@ -7,7 +7,10 @@ const ProductFeed = ()=>{
     const [feeds,setFeeds] = useState([]);
     const navigate = useNavigate();
     const [loading,setLoading] = useState(false);
-    const carId = localStorage.getItem('CartId');
+    const email= localStorage.getItem('email');
+    const name= localStorage.getItem('name');
+    const carId = localStorage.getItem(email);
+    console.log(`${carId}`);
     const [cartinfo,setcartinfo] = useState({});
     const [addLoading,setaddloading] = useState(false);
     const [selectedbtnindex,setselectedbtnindex] = useState(undefined);
@@ -55,8 +58,9 @@ const ProductFeed = ()=>{
             }).then((res)=>{
                if(res.status==201)
                {
-                localStorage.setItem('CartId',res.data.id);
+                localStorage.setItem(email,res.data.id);
                 setcartinfo(res.data);
+                console.log(res);
                }
             }).catch((err)=>{console.log(err)});
         }
@@ -68,7 +72,7 @@ const ProductFeed = ()=>{
         navigate('/login');
     }
     const handleAddCart= (productId,index)=>{
-        const cartID = localStorage.getItem('CartId');
+        const cartID = localStorage.getItem(email);
         setselectedbtnindex(index);
         setaddloading(true);
         axios({
@@ -92,7 +96,7 @@ const ProductFeed = ()=>{
     const addedProducts = cartinfo.line_items ? cartinfo.line_items.map((item)=>item.product_id):[];
     // console.log(addedProducts);
     const handleRemoveCart = (productId,index)=>{
-        const cartID = localStorage.getItem('CartId');
+        const cartID = localStorage.getItem(email);
         setselectedbtnindex(index);
         setaddloading(true);
         const filter = cartinfo.line_items.filter((item)=>{
@@ -121,10 +125,11 @@ const ProductFeed = ()=>{
     return(
       <>
         <div className="d-flex">
-         <div><h1 className="text-secondary">Products Feed</h1></div>
+         <div><h1 style={{color:'#120E43'}}>Products Feed</h1></div>
          <div style={{marginLeft:'72%',marginTop:10}}><button className="btn btn-danger" onClick={handleLogout}>logout</button></div>
         </div>
         <div>
+            <h3 style={{textTransform:'capitalize',color:'#120E43'}}>Welcome {name}</h3>
             <p>Products Added : {cartinfo.total_items||'0'}</p>
             <p>Grand total : {cartinfo.subtotal?cartinfo.subtotal.formatted_with_code:'0 INR'}</p>
         </div>
@@ -132,9 +137,9 @@ const ProductFeed = ()=>{
                 loading?
                 <>
                 <div className="d-flex justify-content-center align-items-center">
-                        <div className="spinner-border text-success" role="status"></div>
-                        <div className="spinner-grow text-success" style={{marginLeft:20}} role="status"></div>
-                        <div style={{marginLeft:20,marginTop:10}} className='text-white'><p><strong>Loading ...</strong></p></div>
+                        <div className="spinner-border text-primary" role="status"></div>
+                        <div className="spinner-grow text-primary" style={{marginLeft:20}} role="status"></div>
+                        <div style={{marginLeft:20,marginTop:10}} className='text-primary'><p><strong>Loading ...</strong></p></div>
                  </div>
                  
                 </>:null

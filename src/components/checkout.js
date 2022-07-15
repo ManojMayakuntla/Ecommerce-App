@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const Checkout = ()=>{
     const [cartinfo,setcartinfo] = useState([]);
-    const cartID = localStorage.getItem('CartId');
+    const email= localStorage.getItem('email');
+    const cartID = localStorage.getItem(email);
     const [loading,setloading] = useState(false);
     const navigate = useNavigate();
     useEffect(()=>{
@@ -31,10 +32,7 @@ const Checkout = ()=>{
     
     return(
         <>
-            <div className="d-flex">
-            <div style={{marginLeft:'35%'}}><h1 className="text-secondary">CHECKOUT DETAILS</h1></div>
-            <div style={{marginLeft:'30%', marginTop:10}}><button className="btn btn-primary" onClick={handleProdcutFeed}>back</button></div>
-            </div>
+        <h2 style={{color:'#120E43'}}>INVOICE REPORT</h2>
                     {
                             loading?
                             <>
@@ -46,9 +44,9 @@ const Checkout = ()=>{
                             
                             </>:null
                    }
-                    <table className="table table-bordered" style={{width:'70%',marginLeft:'15%'}}>
+                    <table className="table table-bordered border-dark" style={{width:'70%',marginLeft:'15%'}}>
                             <thead>
-                                <tr className="bg-primary">
+                                <tr>
                                 <th scope="col">S.NO</th>
                                 <th scope="col">PRODUCT NAME</th>
                                 <th scope="col">IMAGE</th>
@@ -78,6 +76,7 @@ const Checkout = ()=>{
                                 </tr>
                             </tbody>
                 </table>
+                <button className="btn btn-primary" onClick={handleProdcutFeed} style={{marginLeft:'90%',marginBottom:10}}>back</button>
         </>
     )
 }
